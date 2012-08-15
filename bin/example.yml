@@ -1,5 +1,5 @@
 sp:
-  data: space.csv
+  data: example.db
   doc_title: Space Partitioning
   diagram0:
     title: Time for Creation
