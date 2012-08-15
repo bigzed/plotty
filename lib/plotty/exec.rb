@@ -2,6 +2,7 @@ require File.join(File.dirname(__FILE__), "options")
 require File.join(File.dirname(__FILE__), "data")
 require 'gnuplot'
 require 'yaml'
+require 'sqlite3'
 
 module Plotty
   module Exec
@@ -13,22 +14,16 @@ module Plotty
       # For each seaction in your config, parse the datafile
       # and generate every plot which is specified.
       config.each do |key,value|
-        # Parse data into array of polygon hashes:
-        # 1 -> points -> first pair
-        #             -> second pair
-        #      algorithm -> ...
-        data = Plotty::Data.parse!(value["data"])
         # create empty array for diagrams
         diagrams = []
+
+        # Iterate over each diagram
         (value.size - 2).times do |i|
-          # Iterate over each diagram
           diagram_name = "diagram#{i}"
           # Create dataset from data and select 2 values, sort by one 
           # of the asc
-          data_set = create_dataset(data,
-            value[diagram_name]["first_value"],
-            value[diagram_name]["second_value"],
-            value[diagram_name]["order"])
+          data_set = create_dataset(value["data"],
+            value[diagram_name]["query"])
           plot_file = "plot" + i.to_s
           diagram_file = "diagram" + i.to_s + ".pdf"
           create_plot_file(plot_file, data_set, diagram_file, value[diagram_name])
@@ -81,41 +76,23 @@ module Plotty
         end
       end
 
-      def self.create_dataset(data,first_value,second_value)
-        labels = [first_value, second_value]
-        rows = []
-        data.each do |p|
-          if second_value == "surface_area"
-            rows << [p[first_value],p[second_value].to_f.abs]
+      def self.create_dataset(db_name, query)
+        #fetch from db
+        db = SQLite3::Database.new( db_name )
+        rows = db.execute2(query)
+
+        labels = Array.new
+        cols = nil
+
+
+        rows.each_with_index do |row, row_idx|
+          if row_idx == 0
+            cols = Array.new(row.size).map{|i| i = Array.new}
+            labels = row
           else
-            rows << [p[first_value],p[second_value]]
+            row.each_with_index{|value, col_idx| cols[col_idx][row_idx] = value}
           end
         end
-        # Sort arrays by order parameter and agregate if necessary
-        rows.map! { |a| [a[0].to_i,a[1].to_i] }
-        rows.sort! { |a,b| a[0] <=> b[0] }
-        
-        # Check if we need to aggregate
-        if rows[0][0] == rows[1][0]
-          rows.size.times do |i|
-            break if rows[i].nil?
-            current = rows[i][0]
-            first = rows.index{ |e| e[0] == current }
-            last = rows.rindex{ |e| e[0] == current }
-            new_value = [current,0]
-            (last+1-first).times do |j|
-              new_value[1] = new_value[1] + rows[j+i][1]
-            end
-            rows.delete_if { |a| a[0] == current }
-            rows.unshift(new_value)
-          end
-        end
-        rows.reverse!
-        cols = Array.new(rows.size).map { |c| c = [] }
-        rows.each_with_index do |row,row_id|
-          row.each_with_index { |v,col_id| cols[col_id][row_id] = v.to_s }
-        end
-        puts "#{cols[0]}"
         return [labels, cols]
       end
   end

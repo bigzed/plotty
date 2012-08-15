@@ -6,31 +6,4 @@ sp:
     xlabel: points n
     ylabel: time in s
     style: lines
-    first_value: number_of_points
-    second_value: time_for_creating_polygon
-  # diagram1:
-  #   title: "Time for Creation (excerpt)"
-  #   xlabel: points n
-  #   ylabel: time in s
-  #   yrange: "[0:20000]"
-  #   style: dots
-  #   first_value: number_of_points
-  #   second_value: time_for_creating_polygon
-  #   order: 0
-  # diagram2:
-  #   title: Surface Area
-  #   xlabel: points n
-  #   ylabel: surface area
-  #   style: lines
-  #   first_value: number_of_points
-  #   second_value: surface_area
-  #   # was absolute in query
-  #   order: 0
-  # diagram3:
-  #   title: Circumference
-  #   xlabel: points n
-  #   ylabel: circumference
-  #   style: lines
-  #   first_value: number_of_points
-  #   second_value: circumference
-  #   order: 0
+    query: "select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Permute order by number_of_points asc"
