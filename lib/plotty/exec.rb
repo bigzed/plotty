@@ -51,9 +51,7 @@ module Plotty
         File.open(plot_file, "w") do |gp|
           Gnuplot::Plot.new( gp ) do |plot|
             labels = data_set[0]
-            puts labels
             cols = data_set[1]
-            #puts cols
 
             plot.output diagram_file
             plot.set("terminal", value = "pdfcairo")
@@ -81,13 +79,13 @@ module Plotty
         db = SQLite3::Database.new( db_name )
         rows = db.execute2(query)
 
-        labels = Array.new
+        labels = []
         cols = nil
 
 
         rows.each_with_index do |row, row_idx|
           if row_idx == 0
-            cols = Array.new(row.size).map{|i| i = Array.new}
+            cols = Array.new(row.size).map{|i| i = []}
             labels = row
           else
             row.each_with_index{|value, col_idx| cols[col_idx][row_idx] = value}
