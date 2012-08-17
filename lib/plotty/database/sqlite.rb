@@ -8,8 +8,8 @@ module Plotty
 
     def get_dataset(query)
         #fetch from db
-        puts "Fetching data from #{db_name}.."
-        db = SQLite3::Database.new( db_name )
+        puts "Fetching data from #{@db_name}.."
+        db = SQLite3::Database.new(@db_name)
         rows = db.execute2(query)
         puts "Done."
 

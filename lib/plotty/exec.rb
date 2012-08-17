@@ -26,9 +26,9 @@ module Plotty
           # Check which database adapter we need and instantiate it accordingly
           db = value["adapter"] == "sqlite" ? 
             Plotty::Sqlite.new(value["data"]) : Plotty::Mysql.new
-          data_set = db.create_dataset(value[diagram_name]["query"])
+          data_set = db.get_dataset(value[diagram_name]["query"])
           plot_file = "plot" + i.to_s
-          diagram_file = "diagram" + i.to_s + ".pdf"
+          diagram_file = "#{key}_diagram_#{i}.pdf"
           create_plot_file(plot_file, data_set, diagram_file, value[diagram_name])
           `gnuplot #{plot_file}`
           diagrams << diagram_file
