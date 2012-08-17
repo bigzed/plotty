@@ -1,5 +1,6 @@
 sp:
-  data: space.db
+  data: 
+    - space.db
   adapter: sqlite
   doc_title: Space Partitioning
   diagram0:
@@ -11,7 +12,8 @@ sp:
       select number_of_points as numberOfPoints, sum(time_for_creating_polygon) as 
       timeForCreation from Statistic group by number_of_points
 rpa:
-  data: rpa.db
+  data: 
+    - rpa.db
   adapter: sqlite
   doc_title: Random Polygon Algorithm
   diagram0:
@@ -23,7 +25,8 @@ rpa:
       select number_of_points as numberOfPoints, sum(time_for_creating_polygon) as 
       timeForCreation from Statistic group by number_of_points
 velo_good:
-  data: velo_good.db
+  data: 
+    - velo_good.db
   adapter: sqlite
   doc_title: Virmani's Velocity
   diagram0:
@@ -35,7 +38,8 @@ velo_good:
       select number_of_points as numberOfPoints, sum(time_for_creating_polygon) as 
       timeForCreation from Statistic group by number_of_points
 # velo_bad:
-#   data: velo_bad.db
+#   data: 
+#      - velo_bad.db
 #   adapter: sqlite
 #   doc_title: Virmani's Velocity
 #   diagram0:
@@ -45,3 +49,25 @@ velo_good:
 #     style: lines
 #     query: |
 #       select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
+# full:
+#   data:
+#     - space.db
+#     - rpa.db
+#     - velo_good.db
+#   doc_title: "Comarison of all 4 Algorithms"
+#   adapter: sqlite
+#   diagram0:
+#     title: Time for Creation
+#     xlabel: points n
+#     ylabel: time in s
+#     style: dots
+#     query: >
+#       Select 
+#       p.number_of_points as numberOfPoints, 
+#       r.time_for_creating_polygon as rpa,
+#       sp.time_for_creating_polygon as space,
+#       vir.time_for_creating_polygon as virmani
+#       From rpa.Statistic as p
+#       Join rpa.Statistic as r On (p.number_of_points = r.number_of_points)
+#       Join space.Statistic as sp On (p.number_of_points = sp.number_of_points)
+#       Join velo_good.Statistic as vir On (p.number_of_points = vir.number_of_points)
