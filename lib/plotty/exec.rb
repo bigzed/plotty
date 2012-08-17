@@ -24,7 +24,7 @@ module Plotty
           # Create dataset from data and select 2 values, sort by one 
           # of the asc
           # Check which database adapter we need and instantiate it accordingly
-          db = value["adapter"] == sqlite ? 
+          db = value["adapter"] == "sqlite" ? 
             Plotty::Sqlite.new(value["data"]) : Plotty::Mysql.new
           data_set = db.create_dataset(value[diagram_name]["query"])
           plot_file = "plot" + i.to_s
