@@ -1,4 +1,4 @@
-require 'mysql'
+require 'mysql2'
 
 module Plotty
   class Mysql
