@@ -1,8 +1,9 @@
 require File.join(File.dirname(__FILE__), "options")
 require File.join(File.dirname(__FILE__), "data")
+require File.join(File.dirname(__FILE__), "database/sqlite")
+require File.join(File.dirname(__FILE__), "database/mysql")
 require 'gnuplot'
 require 'yaml'
-require 'sqlite3'
 
 module Plotty
   module Exec
@@ -18,12 +19,14 @@ module Plotty
         diagrams = []
 
         # Iterate over each diagram
-        (value.size - 2).times do |i|
+        (value.size - 3).times do |i|
           diagram_name = "diagram#{i}"
           # Create dataset from data and select 2 values, sort by one 
           # of the asc
-          data_set = create_dataset(value["data"],
-            value[diagram_name]["query"])
+          # Check which database adapter we need and instantiate it accordingly
+          db = value["adapter"] == sqlite ? 
+            Plotty::Sqlite.new(value["data"]) : Plotty::Mysql.new
+          data_set = db.create_dataset(value[diagram_name]["query"])
           plot_file = "plot" + i.to_s
           diagram_file = "diagram" + i.to_s + ".pdf"
           create_plot_file(plot_file, data_set, diagram_file, value[diagram_name])
@@ -72,26 +75,6 @@ module Plotty
             end
           end
         end
-      end
-
-      def self.create_dataset(db_name, query)
-        #fetch from db
-        db = SQLite3::Database.new( db_name )
-        rows = db.execute2(query)
-
-        labels = []
-        cols = nil
-
-
-        rows.each_with_index do |row, row_idx|
-          if row_idx == 0
-            cols = Array.new(row.size).map{|i| i = []}
-            labels = row
-          else
-            row.each_with_index{|value, col_idx| cols[col_idx][row_idx] = value}
-          end
-        end
-        return [labels, cols]
       end
   end
 end

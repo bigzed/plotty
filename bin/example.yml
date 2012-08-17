@@ -1,9 +1,44 @@
 sp:
-  data: example.db
+  data: space.db
+  adapter: sqlite
   doc_title: Space Partitioning
   diagram0:
     title: Time for Creation
     xlabel: points n
     ylabel: time in s
     style: lines
-    query: "select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Permute order by number_of_points asc"
+    query: |
+      select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
+rpa:
+  data: rpa.db
+  adapter: sqlite
+  doc_title: Random Polygon Algorithm
+  diagram0:
+    title: Time for Creation
+    xlabel: points n
+    ylabel: time in s
+    style: lines
+    query: |
+      select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
+velo_good:
+  data: velo_good.db
+  adapter: sqlite
+  doc_title: Virmani's Velocity
+  diagram0:
+    title: Time for Creation
+    xlabel: points n
+    ylabel: time in s
+    style: lines
+    query: |
+      select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
+velo_bad:
+  data: velo_bad.db
+  adapter: sqlite
+  doc_title: Virmani's Velocity
+  diagram0:
+    title: Time for Creation
+    xlabel: points n
+    ylabel: time in s
+    style: lines
+    query: |
+      select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
