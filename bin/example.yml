@@ -26,7 +26,7 @@ rpa:
       timeForCreation from Statistic group by number_of_points
 velo_good:
   data: 
-    - velo_good.db
+    - velocity_good.db
   adapter: sqlite
   doc_title: Virmani's Velocity
   diagram0:
@@ -37,18 +37,18 @@ velo_good:
     query: |
       select number_of_points as numberOfPoints, sum(time_for_creating_polygon) as 
       timeForCreation from Statistic group by number_of_points
-# velo_bad:
-#   data: 
-#      - velo_bad.db
-#   adapter: sqlite
-#   doc_title: Virmani's Velocity
-#   diagram0:
-#     title: Time for Creation
-#     xlabel: points n
-#     ylabel: time in s
-#     style: lines
-#     query: |
-#       select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
+velo_bad:
+  data: 
+     - velocity_bad.db
+  adapter: sqlite
+  doc_title: Virmani's Velocity
+  diagram0:
+    title: Time for Creation
+    xlabel: points n
+    ylabel: time in s
+    style: lines
+    query: |
+      select number_of_points as numberOfPoints, time_for_creating_polygon as timeForCreation from Statistic order by number_of_points asc
 # full:
 #   data:
 #     - space.db
