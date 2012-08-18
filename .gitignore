@@ -19,3 +19,4 @@ tmp
 *.csv
 *.tex
 *.sublime*
+*.db
